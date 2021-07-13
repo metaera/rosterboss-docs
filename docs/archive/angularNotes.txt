@@ -1,0 +1,166 @@
+
+===============================================================================================
+                                           Service
+===============================================================================================
+    Purpose: You pass in a constructor function and what gets injected is an instance created by newing that
+             constructor.
+
+
+    What angular does at injection:
+        1) calls "new" on the function (invoking the constructor)
+        2) returns the function instance
+
+        Example: return new ServiceFunction();
+
+
+    myModule.service('myService', function() {
+        // First, the function takes no parameters because it will be "new'd" automatically when the
+        // service is injected
+
+        var prefix = 'Answer: ';
+
+        // Here we are adding methods to the service function
+
+        this.getResult = function(param1, param2) {
+            return prefix + param1 + param2;
+        }
+
+        // Notice you cannot return any value here because Angular will return the instance of this
+        // function itself when injected.  Returning something here would simply have no effect.
+    });
+
+    myModule.controller('Controller', function( myService ) {
+        // Here myService is a new instance of the function you passed in above. Because it is "new'd"
+        // automatically, the constructor takes no parameters
+
+        var result = myService.getResult( 5, 10 );
+        // result: Answer: 15
+
+    });
+
+===============================================================================================
+                                           Factory
+===============================================================================================
+    Purpose: You pass in a factory function and what gets injected is whatever that factory creates.
+             This allows you to create different types of things, such as services that do not allow
+             parameters at creation time, or objects that do allow creation parameters.
+
+    What angular does at injection:
+        1) invokes the function
+        2) returns the result, which can be any object or function
+
+        Example: return FactoryFunction();
+
+    ==== Example: Service Factory ====
+
+    myModule.factory('MyFactory', function() {
+        // You can put values here to make them "private"
+        // They will still be available to the returned object through closure
+        var prefix = 'Answer: ';
+
+        // Notice what is returned here is a new object, denoted by the { and }
+        // Also notice that object has one property (getResult) which is a function
+        return {
+            // Or you can put values here to make them "public"
+            prefix: 'Answer: ';
+
+            getResult: function(param1, param2) {
+                return prefix + param1 + param2;
+            }
+        }
+    });
+
+    myModule.controller('Controller', function( MyFactory ) {
+        // Here MyFactory is an instance of the function you passed in above
+
+        var result = MyFactory.getResult( 5, 10 );
+        // result: Answer: 15
+
+    });
+
+    ==== Example: Object Factory (behaves like a class) ====
+
+    myModule.factory('MyClass', function() {
+        var MyClass = function(prefix) {
+            // Notice how we can pass in constructor parameters
+            this.initialize = function() {
+                // Put any initialization code here, which will be run when the object instance is
+                // injected
+
+            }
+            this.getResult = function(param1, param2) {
+                return prefix + param1 + param2;
+            }
+            this.initialize();  // This will initialize the new object when it is "new'd"
+        }
+        // !!Important - return a REFERENCE to MyClass to prevent injection from actually creating
+        // and instance of the 'class'.  We want that to only happen when we manually "new" one.
+        return (MyClass);
+    });
+
+    myModule.controller('Controller', function( MyClass ) {
+        // Here MyClass is an instance of the function you passed in above, which can be "new'd"
+        // just like a regular constructor.  It can also take parameters since we are causing
+        // the final creation of the resulting object
+
+        var obj = new MyClass( 'Answer: ' );
+        var result = obj.getResult( 5, 10 );
+        // result: Answer: 15
+    });
+
+
+===============================================================================================
+                                          Provider
+===============================================================================================
+    Purpose: Neither 'Service' or 'Factory' allow you to configure the passed in service/factory
+             function because these functions are automatically "new'd" or called by Angular.
+             This means you have to either hard-wire values into the service/factory.
+
+             On the other hand, if you do need to configure the service or factory itself,
+             then providers should work well.
+
+             Seeing this from a traditional viewpoint, it would be like allowing a "class" to be
+             configured differently for each module of the system.  To make a parallel to working
+             in Java, this would be like allowing classes to have different static variables/methods
+             in various parts of your program!
+
+    What angular does at module configuration phase
+        1) angular injects each provider into the config function.
+
+    What angular does at injection:
+        1) calls "new" on the function (invoking the constructor),
+        2) calls $get method of the new function
+        3) returns the result
+
+        Example: return new ProviderFunction().$get()
+
+    ==== Example: Provider ====
+
+    myModule.provider('myProvider', function() {
+
+        // This prefix value is only available within myModule.config()
+
+        this.prefix = '';
+        this.otherConfigInfo = 'Whatever you want';
+
+        // Only the properties on the returned object/function are available in the controller
+        this.$get = function() {
+            var that = this;    // Allows access to config values using closure
+            getResult: function(param1, param2) {
+                return that.prefix + param1 + param2;
+            }
+            otherInfo: that.otherConfigInfo;    // This makes the config info available to caller
+        }
+    });
+
+    myModule.config(function(myProviderProvider) {
+        // Notice how Angular appends 'Provider' to the end of the provider name
+
+        myProviderProvider.prefix = 'Answer: ';
+        myProviderProvider.otherConfigInfo = 'This will do for now';
+    });
+
+    myModule.controller('Controller', function(myProvider) {
+        var result = myProvider.getResult(5, 10);
+        // result: Answer: 15
+    });

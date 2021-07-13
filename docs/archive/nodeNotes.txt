@@ -1,0 +1,42 @@
+========= Removing the 1.4GB V8 heap limit in Node.js =========
+
+http://blog.caustik.com/2012/04/11/escape-the-1-4gb-v8-heap-limit-in-node-js/
+
+1) ulimit -n 999999
+
+2) node command-line options:
+    -nouse-idle-notication
+    -expose-gc
+    -max-old-space-size=8192  <---- MB
+
+3) Compile new V8
+
+    from node install directory:
+
+    cd node-v0.6.14/deps/v8
+    rm -rf *
+    svn export http://v8.googlecode.com/svn/tags/3.10.0.5 .
+
+    Add this to "SConstruct" inside the V8 directory:
+
+        'CPPPATH': [src-dir],
+        'CPPDEFINES': ['V8_MAX_SEMISPACE_SIZE=536870912'],  <--- turns off GC for V8
+
+    Comment out the call to "CollectAllGarbage" in "V8/heap-inl.h"
+
+    if (amount_since_last_global_gc > external_allocation_limit_) {
+        // CollectAllGarbage(kNoGCFlags, "external memory allocation limit reached");
+    }
+
+    Do a clean build of both V8 and node
+
+=========== Killing all node processes =============
+pkill -f node
+
+=========== Updating NPM ============
+sudo npm update npm -g
+
+=========== Updating Node Using 'n' ============
+sudo npm cache clean -f    <-- if needed
+sudo npm install -g n      <-- if needed
+sudo n stable

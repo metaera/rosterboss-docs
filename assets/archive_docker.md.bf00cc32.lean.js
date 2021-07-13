@@ -1,1 +1,0 @@
-import{o as e,c as a,a as r}from"./app.4306a15c.js";const o='{"title":"Remove Containers","description":"","frontmatter":{},"relativePath":"archive/docker.md","lastUpdated":1626194120504}',n={},d=r('',10);n.render=function(r,o,n,i,s,t){return e(),a("div",null,[d])};export default n;export{o as __pageData};

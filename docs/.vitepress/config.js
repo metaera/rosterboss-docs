@@ -2,7 +2,7 @@ const title = 'RosterBoss.app'
 const description = 'The Only Employee Scheduling Solution That Uses Artificial Intelligence To Do the Work For You!'
 
 module.exports = {
-  base: '/',
+  base: '/rosterboss-docs/',
   title,
   description,
 
@@ -10,32 +10,32 @@ module.exports = {
     ['link', {
       rel: 'apple-touch-icon',
       sizes: '180x180',
-      href: '/static/apple-touch-icon.png',
+      href: 'static/apple-touch-icon.png',
     }],
     ['link', {
       rel: 'icon',
       type: 'image/png',
       sizes: '32x32',
-      href: '/static/favicon-32x32.png',
+      href: 'static/favicon-32x32.png',
     }],
     ['link', {
       rel: 'icon',
       type: 'image/png',
       sizes: '16x16',
-      href: '/static/favicon-16x16.png',
+      href: 'static/favicon-16x16.png',
     }],
     ['link', {
       rel: 'manifest',
-      href: '/static/site.webmanifest',
+      href: 'static/site.webmanifest',
     }],
     ['link', {
       rel: 'mask-icon',
-      href: '/static/safari-pinned-tab.svg',
+      href: 'static/safari-pinned-tab.svg',
       color: '#c34c5c',
     }],
     ['link', {
       rel: 'shortcut icon',
-      href: '/static/favicon.ico',
+      href: 'static/favicon.ico',
     }],
     ['meta', {
       name: 'apple-mobile-web-app-title',
@@ -63,7 +63,7 @@ module.exports = {
     }],
     ['meta', {
       property: 'og:image',
-      content: '/static/social/og-image.jpg',
+      content: 'static/social/og-image.jpg',
     }]
   ],
 
@@ -85,15 +85,15 @@ module.exports = {
     },
 
     nav: [
-      {
-        text: 'Development',
-        link: '/guide/development/setup/',
-      },
+      // {
+      //   text: 'Development',
+      //   link: 'guide/development/setup/',
+      // },
     ],
 
     sidebar: {
-      '/guide/': getGuideSidebar(),
-      '/': getGuideSidebar(),
+      'guide/': getGuideSidebar(),
+      '': getGuideSidebar(),
     },
   },
 }
@@ -105,20 +105,7 @@ function getGuideSidebar() {
       children: [
         {
           text: 'Overview',
-          link: '/guide/',
-        },
-      ],
-    },
-    {
-      text: 'Development',
-      children: [
-        {
-          text: 'Setup',
-          link: '/guide/development/setup/',
-        },
-        {
-          text: 'Access',
-          link: '/guide/development/access/',
+          link: 'guide/',
         },
       ],
     },

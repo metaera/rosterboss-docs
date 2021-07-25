@@ -70,7 +70,8 @@ module.exports = {
   themeConfig: {
     logo: 'static/favicon-32x32.png',
 
-    repo: 'metaera/rosterboss',
+    //hide github link
+    repo: '',
 
     docsDir: 'docs',
     docsBranch: 'main',

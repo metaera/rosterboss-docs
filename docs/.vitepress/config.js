@@ -39,11 +39,11 @@ module.exports = {
     }],
     ['meta', {
       name: 'apple-mobile-web-app-title',
-      content: 'AEM Vite',
+      content: 'RosterBoss.app',
     }],
     ['meta', {
       name: 'application-name',
-      content: 'AEM Vite',
+      content: 'RosterBoss.app',
     }],
     ['meta', {
       name: 'msapplication-TileColor',
@@ -64,19 +64,7 @@ module.exports = {
     ['meta', {
       property: 'og:image',
       content: '/static/social/og-image.jpg',
-    }],
-    ['meta', {
-      name: 'twitter:title',
-      content: title,
-    }],
-    ['meta', {
-      property: 'twitter:description',
-      content: description,
-    }],
-    ['meta', {
-      property: 'twitter:site',
-      content: '@cshawaus',
-    }],
+    }]
   ],
 
   themeConfig: {
